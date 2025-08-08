@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vanlife Map - Add Sites</title>
+  <title>Vanlife Map - Supabase Connected</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
   <style>
     body { font-family: sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
     h1 { font-size: 24px; margin-bottom: 10px; }
     #map { height: 400px; border-radius: 10px; margin-bottom: 20px; }
-    .controls, form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    form, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
     input, select, button, textarea {
       padding: 8px;
       font-size: 14px;
@@ -36,7 +37,7 @@
   </style>
 </head>
 <body>
-  <h1>🏕️ Vanlife Camping Sites Map</h1>
+  <h1>🏕️ Vanlife Camping Sites Map (Supabase Connected)</h1>
 
   <div id="map"></div>
 
@@ -54,22 +55,48 @@
     <button type="submit">➕ Add Site</button>
   </form>
 
-  <h2>My Sites</h2>
+  <h2>All Sites</h2>
   <div id="site-list"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-    const map = L.map('map').setView([31.2304, 121.4737], 9);
+    // ✅ 替换成你的 Supabase 项目配置：
+    const supabaseUrl = 'https://sujhhixxqhidrxuycifu.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1amhoaXh4cWhpZHJ4dXljaWZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ2MjU4ODQsImV4cCI6MjA3MDIwMTg4NH0.kqdbcbSXIyBr7Xq9RQu8BqiHT14f1SOgE811EQnP8z8';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    const map = L.map('map').setView([31.2304, 121.4737], 8);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data © OpenStreetMap contributors'
     }).addTo(map);
 
-    const siteList = document.getElementById('site-list');
     const form = document.getElementById('add-site-form');
+    const siteList = document.getElementById('site-list');
 
-    const sites = [];
+    async function loadSites() {
+      const { data: sites, error } = await supabase
+        .from('camp_sites')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    form.addEventListener('submit', function(e) {
+      if (error) {
+        alert('加载营地失败：' + error.message);
+        return;
+      }
+
+      sites.forEach(site => {
+        L.marker([site.lat, site.lng]).addTo(map)
+          .bindPopup(`<b>${site.name}</b><br>${site.category}<br>${site.description || ''}`);
+        const card = document.createElement('div');
+        card.className = 'site-card';
+        card.innerHTML = `<strong>${site.name}</strong><br />
+          <span class="tag">${site.category}</span> (${site.lat.toFixed(4)}, ${site.lng.toFixed(4)})<br />
+          <small>${site.description || ''}</small>`;
+        siteList.appendChild(card);
+      });
+    }
+
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const name = document.getElementById('site-name').value;
@@ -78,24 +105,21 @@
       const category = document.getElementById('category').value;
       const description = document.getElementById('description').value;
 
-      const newSite = { name, lat, lng, category, description };
-      sites.push(newSite);
+      const { data, error } = await supabase.from('camp_sites').insert([
+        { name, lat, lng, category, description }
+      ]);
 
-      // Add marker to map
-      L.marker([lat, lng]).addTo(map)
-        .bindPopup(`<b>${name}</b><br>${category}<br>${description}`).openPopup();
+      if (error) {
+        alert('添加失败：' + error.message);
+        return;
+      }
 
-      // Add to list
-      const card = document.createElement('div');
-      card.className = 'site-card';
-      card.innerHTML = `<strong>${name}</strong><br />
-        <span class="tag">${category}</span> (${lat.toFixed(4)}, ${lng.toFixed(4)})<br />
-        <small>${description}</small>`;
-      siteList.appendChild(card);
-
-      // Reset form
+      alert('添加成功，刷新页面可查看新营地');
       form.reset();
     });
+
+    // 初始加载
+    loadSites();
   </script>
 </body>
 </html>
