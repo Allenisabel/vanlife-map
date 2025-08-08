@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vanlife Map - Add Sites</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
+    h1 { font-size: 24px; margin-bottom: 10px; }
+    #map { height: 400px; border-radius: 10px; margin-bottom: 20px; }
+    .controls, form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    input, select, button, textarea {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      flex: 1;
+    }
+    textarea { flex: 2; }
+    .site-card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tag {
+      display: inline-block;
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏕️ Vanlife Camping Sites Map</h1>
+
+  <div id="map"></div>
+
+  <form id="add-site-form">
+    <input type="text" id="site-name" placeholder="Site Name" required />
+    <input type="text" id="lat" placeholder="Latitude" required />
+    <input type="text" id="lng" placeholder="Longitude" required />
+    <select id="category">
+      <option>City</option>
+      <option>Free</option>
+      <option>Lakeside</option>
+      <option>Forest</option>
+    </select>
+    <textarea id="description" placeholder="Description..."></textarea>
+    <button type="submit">➕ Add Site</button>
+  </form>
+
+  <h2>My Sites</h2>
+  <div id="site-list"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([31.2304, 121.4737], 9);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © OpenStreetMap contributors'
+    }).addTo(map);
+
+    const siteList = document.getElementById('site-list');
+    const form = document.getElementById('add-site-form');
+
+    const sites = [];
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('site-name').value;
+      const lat = parseFloat(document.getElementById('lat').value);
+      const lng = parseFloat(document.getElementById('lng').value);
+      const category = document.getElementById('category').value;
+      const description = document.getElementById('description').value;
+
+      const newSite = { name, lat, lng, category, description };
+      sites.push(newSite);
+
+      // Add marker to map
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup(`<b>${name}</b><br>${category}<br>${description}`).openPopup();
+
+      // Add to list
+      const card = document.createElement('div');
+      card.className = 'site-card';
+      card.innerHTML = `<strong>${name}</strong><br />
+        <span class="tag">${category}</span> (${lat.toFixed(4)}, ${lng.toFixed(4)})<br />
+        <small>${description}</small>`;
+      siteList.appendChild(card);
+
+      // Reset form
+      form.reset();
+    });
+  </script>
+</body>
+</html>
