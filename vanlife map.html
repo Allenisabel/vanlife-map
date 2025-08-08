@@ -1,117 +1,101 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vanlife Map - Add Sites</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    body { font-family: sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
+    h1 { font-size: 24px; margin-bottom: 10px; }
+    #map { height: 400px; border-radius: 10px; margin-bottom: 20px; }
+    .controls, form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    input, select, button, textarea {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      flex: 1;
+    }
+    textarea { flex: 2; }
+    .site-card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tag {
+      display: inline-block;
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Vanlife Map - Add Sites&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body { font-family: sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>h1 { font-size: 24px; margin-bottom: 10px; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>#map { height: 400px; border-radius: 10px; margin-bottom: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.controls, form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>input, select, button, textarea {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #ccc;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex: 1;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>textarea { flex: 2; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.site-card {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 2px 4px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.tag {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #eee;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2px 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-right: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;🏕️ Vanlife Camping Sites Map&lt;/h1&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="map"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;form id="add-site-form"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="site-name" placeholder="Site Name" required /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="lat" placeholder="Latitude" required /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="lng" placeholder="Longitude" required /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;select id="category"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;City&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Free&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Lakeside&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;option&gt;Forest&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;textarea id="description" placeholder="Description..."&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button type="submit"&gt;➕ Add Site&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/form&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;My Sites&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="site-list"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://unpkg.com/leaflet/dist/leaflet.js"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const map = L.map('map').setView([31.2304, 121.4737], 9);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>attribution: 'Map data © OpenStreetMap contributors'</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}).addTo(map);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const siteList = document.getElementById('site-list');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const form = document.getElementById('add-site-form');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sites = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>form.addEventListener('submit', function(e) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const name = document.getElementById('site-name').value;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const lat = parseFloat(document.getElementById('lat').value);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const lng = parseFloat(document.getElementById('lng').value);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const category = document.getElementById('category').value;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const description = document.getElementById('description').value;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>const newSite = { name, lat, lng, category, description };</p>
-<p class="p1"><span class="Apple-converted-space">      </span>sites.push(newSite);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Add marker to map</p>
-<p class="p1"><span class="Apple-converted-space">      </span>L.marker([lat, lng]).addTo(map)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.bindPopup(`&lt;b&gt;${name}&lt;/b&gt;&lt;br&gt;${category}&lt;br&gt;${description}`).openPopup();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Add to list</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const card = document.createElement('div');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>card.className = 'site-card';</p>
-<p class="p1"><span class="Apple-converted-space">      </span>card.innerHTML = `&lt;strong&gt;${name}&lt;/strong&gt;&lt;br /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="tag"&gt;${category}&lt;/span&gt; (${lat.toFixed(4)}, ${lng.toFixed(4)})&lt;br /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;small&gt;${description}&lt;/small&gt;`;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>siteList.appendChild(card);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Reset form</p>
-<p class="p1"><span class="Apple-converted-space">      </span>form.reset();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <h1>🏕️ Vanlife Camping Sites Map</h1>
+
+  <div id="map"></div>
+
+  <form id="add-site-form">
+    <input type="text" id="site-name" placeholder="Site Name" required />
+    <input type="text" id="lat" placeholder="Latitude" required />
+    <input type="text" id="lng" placeholder="Longitude" required />
+    <select id="category">
+      <option>City</option>
+      <option>Free</option>
+      <option>Lakeside</option>
+      <option>Forest</option>
+    </select>
+    <textarea id="description" placeholder="Description..."></textarea>
+    <button type="submit">➕ Add Site</button>
+  </form>
+
+  <h2>My Sites</h2>
+  <div id="site-list"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([31.2304, 121.4737], 9);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © OpenStreetMap contributors'
+    }).addTo(map);
+
+    const siteList = document.getElementById('site-list');
+    const form = document.getElementById('add-site-form');
+
+    const sites = [];
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('site-name').value;
+      const lat = parseFloat(document.getElementById('lat').value);
+      const lng = parseFloat(document.getElementById('lng').value);
+      const category = document.getElementById('category').value;
+      const description = document.getElementById('description').value;
+
+      const newSite = { name, lat, lng, category, description };
+      sites.push(newSite);
+
+      // Add marker to map
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup(`<b>${name}</b><br>${category}<br>${description}`).openPopup();
+
+      // Add to list
+      const card = document.createElement('div');
+      card.className = 'site-card';
+      card.innerHTML = `<strong>${name}</strong><br />
+        <span class="tag">${category}</span> (${lat.toFixed(4)}, ${lng.toFixed(4)})<br />
+        <small>${description}</small>`;
+      siteList.appendChild(card);
+
+      // Reset form
+      form.reset();
+    });
+  </script>
 </body>
 </html>
